@@ -2,6 +2,7 @@
 name = "const-config-len"
 version = "0.1.0"
 edition = "2024"
+authors = ["Stella Cannefax"]
 
 [dependencies]
 postcard = { version = "1.1.1", features = ["heapless", "heapless-cas", "alloc", "use-std"] }
