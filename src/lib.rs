@@ -5,7 +5,7 @@ use quote::quote;
 use syn::{parse_macro_input, Expr, ExprLit, Lit};
 
 #[proc_macro]
-pub fn const_config_len(input: TokenStream) -> TokenStream {
+pub fn const_config_size(input: TokenStream) -> TokenStream {
     let args_expr = parse_macro_input!(input as syn::Expr);
     
     // Get file_path and nested_field based on input type.

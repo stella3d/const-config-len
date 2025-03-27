@@ -1,0 +1,14 @@
+[
+    {
+        "foo": 1,
+        "bar": "2",
+        "baz": true
+    },
+    {
+        "this": "object",
+        "is": "different"
+    },
+    {
+        "something": "else"
+    }
+]
