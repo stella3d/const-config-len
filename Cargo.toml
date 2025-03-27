@@ -1,0 +1,14 @@
+[package]
+name = "const-config-len"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+postcard = { version = "1.1.1", features = ["heapless", "heapless-cas", "alloc", "use-std"] }
+quote = "1.0.40"
+serde = { version = "1.0.219", features = ["std", "alloc", "derive", "serde_derive"] }
+serde_json = { version = "1.0.140", features = ["std", "alloc"] }
+syn = "2.0.100"
+
+[lib]
+proc-macro = true
