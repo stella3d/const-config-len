@@ -24,7 +24,7 @@ pub fn const_config_len(input: TokenStream) -> TokenStream {
             if let Expr::Lit(ExprLit { lit: Lit::Str(s), .. }) = elems[1] {
                 let scheme_val = s.value();
                 match scheme_val.as_str() {
-                    "json" | "postcard" => scheme_val,
+                    "json" => scheme_val,
                     _ => panic!("Unsupported deserialization scheme: {}", scheme_val),
                 }
             } else {
@@ -55,11 +55,6 @@ pub fn const_config_len(input: TokenStream) -> TokenStream {
                 .unwrap_or_else(|_| panic!("Failed to parse JSON array in file: {}", file_path));
             vec.len()
         },
-        "postcard" => {
-            let vec: Vec<serde_json::Value> = postcard::from_bytes(&bytes)
-                .unwrap_or_else(|_| panic!("Failed to parse postcard array in file: {}", file_path));
-            vec.len()
-        },
         _ => panic!("Unsupported deserialization scheme: {}", scheme),
     };
 
@@ -73,7 +68,6 @@ fn guess_scheme<S: AsRef<str>>(file_path: S) -> String {
         .and_then(|os_str| os_str.to_str())
         .unwrap_or("");
     let scheme = match ext {
-        "postcard" | "pc" => "postcard".to_string(),
         "json" => "json".to_string(),
         _ => "json".to_string(),
     };
