@@ -45,25 +45,44 @@ pub fn const_config_size(input: TokenStream) -> TokenStream {
     let bytes = fs::read(&file_path)
         .unwrap_or_else(|_| panic!("Failed to read file: {}", file_path));
 
-    let length = {
-        // Only JSON supported
+    let root_value: serde_json::Value = serde_json::from_slice(&bytes)
+        .unwrap_or_else(|_| panic!("Failed to parse JSON in file: {}", file_path));
+
+    let length = 
         if let Some(ref nested) = nested_field {
-            let v: serde_json::Value = serde_json::from_slice(&bytes)
-                .unwrap_or_else(|_| panic!("Failed to parse JSON in file: {}", file_path));
-            let nested_value = nested.split('.').fold(&v, |acc, key| {
+            let nested_value = nested.split('.').fold(&root_value, |acc, key| {
                 acc.get(key).unwrap_or_else(|| panic!("Missing nested field '{}' in file: {}", nested, file_path))
             });
             if let serde_json::Value::Array(arr) = nested_value {
                 arr.len()
+            } else if let serde_json::Value::Number(num) = nested_value {
+                if let Some(n) = num.as_i64() {
+                    if n < 0 {
+                        panic!("Integer value is negative in field '{}' in file: {}", nested, file_path);
+                    }
+                    n as usize
+                } else {
+                    panic!("Number value is not an integer in field '{}' in file: {}", nested, file_path)
+                }
             } else {
-                panic!("Nested field '{}' is not an array in file: {}", nested, file_path)
+                panic!("nested field '{}' is neither an Array nor a Number in file: {}", nested, file_path)
             }
         } else {
-            let vec: Vec<serde_json::Value> = serde_json::from_slice(&bytes)
-                .unwrap_or_else(|_| panic!("Failed to parse JSON array in file: {}", file_path));
-            vec.len()
-        }
-    };
+            if let serde_json::Value::Array(arr) = root_value {
+                arr.len()
+            } else if let serde_json::Value::Number(num) = root_value {
+                if let Some(n) = num.as_i64() {
+                    if n < 0 {
+                        panic!("Integer value is negative in root of file: {}", file_path);
+                    }
+                    n as usize
+                } else {
+                    panic!("Number value is not an integer in root of file: {}", file_path)
+                }
+            } else {
+                panic!("root element is neither an Array nor a Number in file: {}", file_path)
+            }
+        };
 
     TokenStream::from(quote! { #length })
 }
