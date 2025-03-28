@@ -37,3 +37,15 @@ fn test_int_1level_nesting() {
     const LEN: usize = const_config_size!(("tests/nest1_lit4.json", "your_field"));
     assert_eq!(LEN, 4);
 }
+
+#[test]
+fn test_map_keys_from_root() {
+    const LEN: usize = const_config_size!("tests/root_map_len2.json");
+    assert_eq!(LEN, 2);
+}
+
+#[test]
+fn test_map_keys_level2_nesting() {
+    const LEN: usize = const_config_size!(("tests/nest2_map_len2.json", "data.inner"));
+    assert_eq!(LEN, 2);
+}

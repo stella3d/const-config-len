@@ -64,8 +64,10 @@ pub fn const_config_size(input: TokenStream) -> TokenStream {
                 } else {
                     panic!("Number value is not an integer in field '{}' in file: {}", nested, file_path)
                 }
+            } else if let serde_json::Value::Object(map) = nested_value {
+                map.len()
             } else {
-                panic!("nested field '{}' is neither an Array nor a Number in file: {}", nested, file_path)
+                panic!("nested field '{}' is neither an Array, a Number, nor an Object in file: {}", nested, file_path)
             }
         } else {
             if let serde_json::Value::Array(arr) = root_value {
@@ -79,8 +81,10 @@ pub fn const_config_size(input: TokenStream) -> TokenStream {
                 } else {
                     panic!("Number value is not an integer in root of file: {}", file_path)
                 }
+            } else if let serde_json::Value::Object(map) = root_value {
+                map.len()
             } else {
-                panic!("root element is neither an Array nor a Number in file: {}", file_path)
+                panic!("root element is neither an Array, a Number, nor an Object in file: {}", file_path)
             }
         };
 
