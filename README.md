@@ -9,6 +9,8 @@ let's say we have a config file `config.json` with these contents:
 [ { "a": 1 }, { "a": 2 } ]
 ```
 
+we'd read the array length of that as a const like this:
+
 ```rust
 use const_config_size::const_config_size;
 use smallvec::SmallVec;
