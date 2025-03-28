@@ -11,9 +11,13 @@ let's say we have a config file `config.json` with these contents:
 
 ```rust
 use const_config_size::const_config_size;
+use smallvec::SmallVec;
 
 // will be equal to 2
 const CONFIG_ITEM_COUNT: usize = const_config_size!("config.json");
+
+// an example of the original intended use - keeping SmallVecs from spilling to heap
+type UniqueItemBuffer<T> = SmallVec<[T; CONFIG_ITEM_COUNT]>;
 ```
 
 it would also work the same with this config file, since there are 2 top-level keys in the object:
