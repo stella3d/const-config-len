@@ -1,4 +1,4 @@
-#const-config-len
+# const-config-size
 
 This is intended to be used with keeping the size of bounded-size buffers in sync with a JSON config file, but can be used to read a usize const from almost any sort of JSON config.
 
