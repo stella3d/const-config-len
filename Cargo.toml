@@ -3,6 +3,7 @@ name = "const-config-size"
 version = "0.1.0"
 edition = "2024"
 authors = ["Stella Cannefax"]
+license = "MIT"
 
 [dependencies]
 quote = "1.0.40"
